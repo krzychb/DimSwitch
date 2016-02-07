@@ -1,17 +1,42 @@
 #include "Arduino.h"
-#include "IntensitySwitch.h"
+#include "DimSwitch.h"
 
-IntensitySwitch::IntensitySwitch(int intensityMeasurePin, int switchPin)
+//
+// Object constructor
+//
+// intensityMeasurePin - input pin where light sensor is connected to
+// switchPin - output pin control relay is connected to
+//
+DimSwitch::DimSwitch(int intensityMeasurePin, int switchPin)
 {
   _intensityMeasurePin = intensityMeasurePin;
   _switchPin = switchPin;
   pinMode(_intensityMeasurePin, INPUT);
   pinMode(_switchPin, OUTPUT);
+  stateName = SEQUENCE_IDLE;
+  //
+  // ToDo:
+  // Retrieve maxIntensity and minIntensity from flash / EPROM
+  // calculate dbIntensity
+  //
 }
 
 
-void IntensitySwitch::runSequence()
+//
+// State machine sequence that operates the control relay
+//
+void DimSwitch::runSequence(void)
 {
+  // ====================
+  // Do Nothing
+  // ====================
+  if (stateName == SEQUENCE_IDLE)
+  {
+	  return;
+  }
+
+  _currentIntensity = readIntensityCounts();
+
   // ====================
   // Toggle Switch
   // ====================
@@ -22,7 +47,7 @@ void IntensitySwitch::runSequence()
     digitalWrite(_switchPin, HIGH);
     _stateTimer = millis();
     stateName = TOGGLE_ON__FINALIZE;
-    Serial.print("\Toggle On > ");
+    Serial.print("Toggle On > ");
   }
   else if (stateName == TOGGLE_ON__FINALIZE)
   {
@@ -40,7 +65,7 @@ void IntensitySwitch::runSequence()
   {
     _sequenceTimer = millis();
     Serial.print("\tIdle > ");
-    if (readIntensityCounts() <= MIN_INTENSITY/2)
+    if (_currentIntensity <= minIntensity/2)
     {
       digitalWrite(_switchPin, HIGH);
       _stateTimer = millis();
@@ -67,7 +92,7 @@ void IntensitySwitch::runSequence()
   {
     if (millis() > _stateTimer + POWER_ON_DURATION)
     {
-      if (readIntensityCounts() <= MIN_INTENSITY/2)
+      if (_currentIntensity <= minIntensity/2)
       {
         Serial.print("Not On! > ");
       }
@@ -82,7 +107,7 @@ void IntensitySwitch::runSequence()
   {
     _sequenceTimer = millis();
     Serial.print("\tIdle > ");
-    if (readIntensityCounts() > MIN_INTENSITY/2)
+    if (_currentIntensity > minIntensity/2)
     {
       digitalWrite(_switchPin, HIGH);
       _stateTimer = millis();
@@ -109,7 +134,7 @@ void IntensitySwitch::runSequence()
   {
     if (millis() > _stateTimer + POWER_OFF_DURATION)
     {
-      if (readIntensityCounts() > MIN_INTENSITY/2)
+      if (_currentIntensity > minIntensity/2)
       {
         Serial.print(" Not Off! > ");
       }
@@ -124,7 +149,7 @@ void IntensitySwitch::runSequence()
   {
     _sequenceTimer = millis();
     _intensityChangeTimer = _sequenceTimer;
-    _lastIntensity = readIntensityCounts();
+    _lastIntensity = _currentIntensity;
     Serial.print("\tIdle > ");
     digitalWrite(_switchPin, HIGH);
     _stateTimer = millis();
@@ -145,8 +170,9 @@ void IntensitySwitch::runSequence()
     if (millis() > _stateTimer + TRAVEL_MAX_DURATION || abs(_intensityChange) <= DB_INTENSITY_CHANGE)
     {
       Serial.println();
-      Serial.print("\tGet to ");
-      Serial.print(readIntensityCounts());
+      Serial.print("\tGot to ");
+      minIntensity = _currentIntensity;
+      Serial.print(minIntensity);
       Serial.print(" > ");
       digitalWrite(_switchPin, LOW);
       _stateTimer = millis();
@@ -180,8 +206,21 @@ void IntensitySwitch::runSequence()
     {
       digitalWrite(_switchPin, LOW);
       Serial.println();
-      Serial.print("\tGet to ");
-      Serial.print(readIntensityCounts());
+      Serial.print("\tGot to ");
+      maxIntensity = _currentIntensity;
+      Serial.print(maxIntensity);
+      //
+      if(maxIntensity < minIntensity)
+      {
+		int tmpVal = maxIntensity;
+		maxIntensity = minIntensity;
+		minIntensity = tmpVal;
+      }
+      //
+      // ToDo:
+      // Save maxIntensity and minIntensity to flash / EPROM
+      //
+      dbIntensity = (maxIntensity - minIntensity) / DB_RANGE_DIVIDER;
       Serial.print(" > ");
       stateName = SEQUENCE_IDLE;
       Serial.println("Idle");
@@ -194,9 +233,9 @@ void IntensitySwitch::runSequence()
   {
     _sequenceTimer = millis();
     _intensityChangeTimer = _sequenceTimer;
-    _lastIntensity = readIntensityCounts();
+    _lastIntensity = _currentIntensity;
     Serial.print("\tIdle > ");
-    if (abs(_targetIntensity - readIntensityCounts()) < DB_INTENSITY)
+    if (abs(_targetIntensity - _currentIntensity) < dbIntensity)
     {
       Serial.print("On Target! > ");
       stateName = SEQUENCE_IDLE;
@@ -204,10 +243,10 @@ void IntensitySwitch::runSequence()
     }
     else
     {
-      int currentIntensity = readIntensityCounts();
+      int currentIntensity = _currentIntensity;
       digitalWrite(_switchPin, HIGH);
       _stateTimer = millis();
-      if (currentIntensity > MIN_INTENSITY/2)
+      if (currentIntensity > minIntensity/2)
       {
         stateName = SET_INTENSITY__ACCELERATE;
       }
@@ -235,7 +274,7 @@ void IntensitySwitch::runSequence()
   {
     if (millis() > _stateTimer + ACCELERATE_DURATION)
     {
-      int currentIntensity = readIntensityCounts();
+      int currentIntensity = _currentIntensity;
       boolean goingUp = (_intensityChange > 0) ? true : false;
       _targetAbove = (currentIntensity < _targetIntensity) ? true : false;
       Serial.println();
@@ -278,8 +317,8 @@ void IntensitySwitch::runSequence()
   }
   else if (stateName == SET_INTENSITY__GET_TARGET)
   {
-    boolean valueAbove = (readIntensityCounts() > _targetIntensity) ? true : false;
-    // finalize when target is reached or intensity does not change
+    boolean valueAbove = (_currentIntensity > _targetIntensity) ? true : false;
+    // finalise when target is reached or intensity does not change
     if (_targetAbove && valueAbove || !_targetAbove && !valueAbove || abs(_intensityChange) <= DB_INTENSITY_CHANGE)
     {
       stateName = SET_INTENSITY__FINALIZE;
@@ -291,7 +330,7 @@ void IntensitySwitch::runSequence()
     stateName = SEQUENCE_IDLE;
     Serial.println();
     Serial.print("\tFinalized at ");
-    Serial.print(readIntensityCounts());
+    Serial.print(_currentIntensity);
     Serial.print(" > ");
 
     Serial.println("Idle");
@@ -306,11 +345,12 @@ void IntensitySwitch::runSequence()
       stateName = SEQUENCE_IDLE;
       Serial.println("Timeout! > Idle");
     }
+	// Periodically sense light intensity change as required by certain states
     if ((stateName & SET_INTENSITY) == SET_INTENSITY || (stateName & CALIBRATE) == CALIBRATE)
     {
       if (millis() > _intensityChangeTimer + SENSE_CHANGE_DURATION)
       {
-        int currentIntensity = readIntensityCounts();
+        int currentIntensity = _currentIntensity;
         _intensityChange = currentIntensity - _lastIntensity;
         _lastIntensity = currentIntensity;
         _intensityChangeTimer = millis();
@@ -320,53 +360,110 @@ void IntensitySwitch::runSequence()
 }
 
 
-int IntensitySwitch::readIntensityCounts()
+//
+// Read light intensity
+//
+// Note: returned value is a raw output of ADC where the light sensor is connected to
+//
+int DimSwitch::readIntensityCounts(void)
 {
   int valueAcc = 0;
   for (int i = 0; i < MEASURE_SAMPLES; i++)
+  {
     valueAcc += analogRead(_intensityMeasurePin);
+  }
   return (int) valueAcc / MEASURE_SAMPLES;
 }
 
-
-int IntensitySwitch::readIntensityPercent()
+//
+// Read light intensity
+//
+// Note: returned value is a percentage of current light intensity
+// in relation of minimum and maximum light intensity values
+//
+int DimSwitch::readIntensityPercent(void)
 {
-  return (int) (100.0 * (readIntensityCounts() - MIN_INTENSITY) / (MAX_INTENSITY - MIN_INTENSITY));
+  return (int) (100.0 * (readIntensityCounts() - minIntensity) / (maxIntensity - minIntensity));
 }
 
 
-void IntensitySwitch::toggleSwitch()
+//
+// Get state of the lamp
+//
+// HIGH - the light is on, LOW - the light is off
+//
+bool DimSwitch::getState(void)
+{
+    if (readIntensityCounts() > minIntensity/2)
+    {
+    	return HIGH;
+    }
+    else
+    {
+    	return LOW;
+    }
+}
+
+
+//
+// Toggle output relay on
+//
+void DimSwitch::toggle(void)
 {
   stateName = TOGGLE_ON;
 }
 
 
-void IntensitySwitch::power(boolean state)
+//
+// Initiate a sequence to power the light on on off
+//
+// state - to power the lamp on set it to logic true, to power off set it to false
+//
+void DimSwitch::power(bool state)
 {
   if (state == HIGH)
+  {
     stateName = POWER_ON;
+  }
   else
+  {
     stateName = POWER_OFF;
+  }
 }
 
 
-void IntensitySwitch::calibrate()
+//
+// Initiate a sequence to calibrate readings of light intensity ADC
+//
+void DimSwitch::calibrate(void)
 {
   stateName = CALIBRATE;
 }
 
 
-void IntensitySwitch::setIntensity(int targetIntensityPercent)
+//
+// Initiate a sequence to set specific light intensity
+//
+// targetIntensityPercent - light intensity to set
+//
+void DimSwitch::setIntensity(int targetIntensityPercent)
 {
-  _targetIntensity = (int) (MIN_INTENSITY + (MAX_INTENSITY - MIN_INTENSITY) * (float) targetIntensityPercent / 100);
+  _targetIntensity = (int) (minIntensity + (maxIntensity - minIntensity) * (float) targetIntensityPercent / 100);
   stateName = SET_INTENSITY;
 }
 
 
-void IntensitySwitch::quit()
+//
+// Quit the running sequence in progress
+//
+// Note: the control relay will be switched off
+//
+void DimSwitch::quit(void)
 {
   if (digitalRead(_switchPin) == HIGH)
+  {
     digitalWrite(_switchPin, LOW);
+  }
   stateName = SEQUENCE_IDLE;
   Serial.println("Quit! > Idle");
 }

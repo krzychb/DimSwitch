@@ -1,11 +1,12 @@
-#ifndef INTENSITYSWITCH_H
-#define INTENSITYSWITCH_H
+#ifndef DIMSWITCH_H
+#define DIMSWITCH_H
 
 #include "Arduino.h"
 
 #define MEASURE_SAMPLES 5
 
-// times im miliseconds
+// time periods to operate control relay
+// values are in milliseconds
 #define TOGGLE_ON_DURATION 100
 #define TOGGLE_OFF_DURATION 100
 #define POWER_ON_DURATION 1200
@@ -15,10 +16,11 @@
 #define TRAVEL_MAX_DURATION 7000
 #define SEQUENCE_TIMEOUT 8000
 
-// values in AD counts
+// default light intensity values
+// values are in ADC counts
 #define MIN_INTENSITY 260
 #define MAX_INTENSITY 770
-#define DB_INTENSITY (MAX_INTENSITY - MIN_INTENSITY) / 20
+#define DB_RANGE_DIVIDER 20
 #define DB_INTENSITY_CHANGE 1
 
 #define SEQUENCE_IDLE 0x00
@@ -55,20 +57,24 @@
 #define CALIBRATE__TO_OTHER_LIMIT 0x55
 
 
-class IntensitySwitch
+class DimSwitch
 {
   public:
-    byte stateName = SEQUENCE_IDLE;
+    char stateName = SEQUENCE_IDLE;
+    int maxIntensity = MAX_INTENSITY;
+    int minIntensity = MIN_INTENSITY;
+    int dbIntensity = (MAX_INTENSITY - MIN_INTENSITY) / DB_RANGE_DIVIDER;
 
-    IntensitySwitch(int intensityMeasurePin, int switchPin);
-    void runSequence();
-    int readIntensityCounts();
-    int readIntensityPercent();
-    void toggleSwitch();
-    void power(boolean state);
-    void calibrate();
+    DimSwitch(int intensityMeasurePin, int switchPin);
+    void runSequence(void);
+    int readIntensityCounts(void);
+    int readIntensityPercent(void);
+    bool getState(void);
+    void toggle(void);
+    void power(bool state);
+    void calibrate(void);
     void setIntensity(int targetIntensity);
-    void quit();
+    void quit(void);
 
   private:
     int _intensityMeasurePin;
@@ -76,6 +82,7 @@ class IntensitySwitch
     long _stateTimer;
     long _sequenceTimer;
     long _intensityChangeTimer;
+    int _currentIntensity;
     int _lastIntensity;
     int _intensityChange;
     int _targetIntensity;

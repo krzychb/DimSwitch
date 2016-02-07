@@ -1,0 +1,23 @@
+###########################################
+# Syntax Coloring Map For DimSwitch
+###########################################
+
+###########################################
+# Datatypes (KEYWORD1)
+###########################################
+
+DimSwitch	KEYWORD1
+
+###########################################
+# Methods and Functions (KEYWORD2)
+###########################################
+
+runSequence	KEYWORD2
+readIntensityCounts	KEYWORD2
+readIntensityPercent	KEYWORD2
+getState	KEYWORD2
+toggle	KEYWORD2
+power	KEYWORD2
+calibrate	KEYWORD2
+setIntensity	KEYWORD2
+quit	KEYWORD2
