@@ -6,6 +6,10 @@ It works with ESP8266, Arduino UNO, Micro, MEGA, DUE and other compatible Arduin
 
 ![OSRAM QUICKTRONIC - INTELLIGENT QTi DALI 2x28/54 DIM](pictures/OSRAM-QUICKTRONIC-INTELLIGENT-QTi-DALI-2x28-54-DIM.jpg)
 
+**Warning:** Building and testing a hardware project with this library involves working with mains power that is dangerous to your life. 
+
+Do not connect this project to the mains power without proper training and certification! Please read [Safety Guidelines for High Voltage and/or Line Powered Equipment](http://www.repairfaq.org/REPAIR/F_safety.html)
+
 
 ## Functions
 
@@ -48,7 +52,7 @@ The cheapest, self-contained application of DimSwitch library is for hardware li
 
 [DimSwitchTester-ESP.ino](../examples/DimSwitchTester-ESP)
 
-Controlling the lamp is possible by clicking the links on a simple web page. This web and links are prepared for easy integration with openHAB using [HTTP binding]( https://github.com/openhab/openhab/wiki/Http-Binding).
+Controlling the lamp is possible by clicking the links on a simple web page. This web and links are prepared for easy integration with openHAB using [HTTP binding](https://github.com/openhab/openhab/wiki/Http-Binding).
 
 ![Testing example application with ESP8266 board](pictures/example-esp8266.jpg)
  
@@ -146,7 +150,7 @@ If returned value is *true* then the lamp is on, if *false* then off.
 
 #### Toggle Relay
 
-Toggle relay output on for the specific period *TOGGLE_ON_DURATION* in milliseconds and defined in (../src/DimSwitch.h).
+Toggle relay output on for the specific period *TOGGLE_ON_DURATION* in milliseconds and defined in [DimSwitch.h](../src/DimSwitch.h).
 
 ```c
 #define TOGGLE_ON_DURATION 100
@@ -156,6 +160,9 @@ Expected result of calling this function will be turning the light on or off, de
 ```cpp
 void:toggle(void)
 ```
+
+Check: [Code](../src/DimSwitch.cpp#L40-L60) | [Sequence](sms-and-wvf.md#toggle-relay-sequence) | [Wave-forms](sms-and-wvf.md#toggle-relay-wave-forms)
+
 If lamp was previously off, then the lamp will be turned on and vice versa.
 
 
@@ -166,6 +173,8 @@ Power the lamp on or off by toggling the output relay. The relay will not be tog
 ```cpp
 void power(bool state);
 ```
+
+Check - Power On: [Code](../src/DimSwitch.cpp#L61-L102) | [Sequence](sms-and-wvf.md#power-on-sequence) | [Wave-forms](sms-and-wvf.md#power-on-wave-forms), Power Off: [Code](../src/DimSwitch.cpp#L103-L144) | [Sequence](sms-and-wvf.md#power-off-sequence) | [Wave-forms](sms-and-wvf.md#power-off-wave-forms)
 
 Input parameter *state* should be set *true* to power the lamp on, or *false* to power it off.
 
@@ -178,8 +187,11 @@ Execute calibration procedure to establish minimum and maximum light intensity v
 void calibrate(void);
 ```
 
-Calibration is done by ramping light intensity to minimum and maximum. To execute calibration the lamp must be switched on . 
-Until calibration is performed the following default values are assumed according to definition in (../src/DimSwitch.h). 
+Check: [Code](../src/DimSwitch.cpp#L145-L228) | [Sequence](sms-and-wvf.md#calibrate-sequence) | [Wave-forms](sms-and-wvf.md#calibrate-wave-forms)
+
+Calibration is done by ramping light intensity to minimum and maximum. To execute calibration the lamp must be switched on.
+ 
+Until calibration is performed the following default values are assumed according to definition in [DimSwitch.h](../src/DimSwitch.h). 
 
 ```c
 #define MIN_INTENSITY 300
@@ -194,6 +206,8 @@ Set the light intensity to specific percentage of minimum and maximum values est
 ```cpp
 void setIntensity(int targetIntensityPercent);
 ```
+
+Check: [Code](../src/DimSwitch.cpp#L229-L337) | [Sequence](sms-and-wvf.md#set-intensity-sequence) | [Wave-forms](sms-and-wvf.md#set-intensity-wave-forms)
 
 Input parameter *targetIntensityPercent* range is from 0 to 100 and it represents percentage of light intensity of minimum and maximum values.
 
