@@ -58,7 +58,7 @@ The cheapest, self-contained application of DimSwitch library is for hardware li
 
 Controlling the lamp is possible by clicking the links on a simple web page. This web and links are prepared for easy integration with openHAB using [HTTP binding](https://github.com/openhab/openhab/wiki/Http-Binding).
 
-![Testing example application with ESP8266 board](pictures/example-esp8266.jpg)
+![Testing example application with ESP8266 board](pictures/example-esp8266.png)
  
 
 ### Arduino UNO
@@ -69,7 +69,7 @@ The simplest and minimum application of DimSwitch library is using Arduino avr b
 
 Controlling the lamp in this particular example is done from a keyboard using Arduino IDE Serial Monitor and is intended for less experienced users. Once you get familiar and comfortable using this example, go wireless using ESP8266 module in example above or try other types of wireless connections like RF 315/433 MHz, [nRF24L01](http://playground.arduino.cc/InterfacingWithHardware/Nrf24L01), Bluetooth, [etc.](http://playground.arduino.cc/Main/InterfacingWithHardware)
 
-![Testing example application with Arduino UNO board](pictures/example-arduino.jpg)
+![Testing example application with Arduino UNO board](pictures/example-arduino.png)
 
 
 ## API
