@@ -1,0 +1,13 @@
+// DimSwitch Library Tester - use with DimSwitchTester-ESP.ino
+// Documentation - https://github.com/krzychb/DimSwitch
+//
+// place this file in "openhab/configuration/itmes" directory
+//
+
+Number LightIntensity	"Light intensity [%.0f %%]"	<slider>	{http="<[http://192.168.1.110/dimswitch:20000:REGEX(.*Light Intensity: (.*?)%<br/>.*)]"}
+Number TargetIntensity	"Change to [%.0f %%]"		<slider>	{http=">[*:GET:http://192.168.1.110/dimswitch?TargetIntensity=%2$s] <[http://192.168.1.110/dimswitch:20000:REGEX(.*value=\"(.*?)\"><input.*)]"}
+Switch LightSwitch		"Light switch"							{http=">[*:GET:http://192.168.1.110/dimswitch?Switch=%2$s] <[http://192.168.1.110/dimswitch:20000:REGEX(.*Light is: (.*?), switch it.*)]"}
+Switch Calibrate		"Calibrate"					<settings>	{http=">[*:GET:http://192.168.1.110/dimswitch?Calibrate=%2$s]"}
+Number LightSensor		"Now [%.0f]"				<settings>	{http="<[http://192.168.1.110/dimswitch:20000:REGEX(.*Now: (.*?)<br/>Min:.*)]"}
+Number MinIntensity		"Min [%.0f]"				<settings>	{http="<[http://192.168.1.110/dimswitch:20000:REGEX(.*Min: (.*?)<br/>Max:.*)]"}
+Number MaxIntensity		"Max [%.0f]"				<settings>	{http="<[http://192.168.1.110/dimswitch:20000:REGEX(.*Max: (.*?)<br/><a href.*)]"}

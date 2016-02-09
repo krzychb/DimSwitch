@@ -2,9 +2,13 @@
 
 DimSwitch is an Arduino library to control electronic dimmable ballasts for fluorescent light tubes.
 
+![OSRAM QUICKTRONIC - INTELLIGENT QTi DALI 2x28/54 DIM](pictures/OSRAM-QUICKTRONIC-INTELLIGENT-QTi-DALI-2x28-54-DIM.jpg)
+
 It works with ESP8266, Arduino UNO, Micro, MEGA, DUE and other compatible Arduino boards.
 
-![OSRAM QUICKTRONIC - INTELLIGENT QTi DALI 2x28/54 DIM](pictures/OSRAM-QUICKTRONIC-INTELLIGENT-QTi-DALI-2x28-54-DIM.jpg)
+| **Warning:**  | **Hazardous Voltage!** |
+| --- | --- |
+| ![Hazardous Voltage Warning](pictures/hazardous-voltage-warning-label.png) |  Building and testing hardware for this project involves working with mains power that is dangerous to your life. Do not connect this project to the mains power without proper training and certification! Please read [Safety Guidelines for High Voltage and/or Line Powered Equipment](http://www.repairfaq.org/REPAIR/F_safety.html) |
 
 **Warning:** Building and testing a hardware project with this library involves working with mains power that is dangerous to your life. 
 
@@ -31,9 +35,9 @@ Do not connect this project to the mains power without proper training and certi
 
 Operation of this library has been verified with the following ballasts:
 
-| [Philips HF-REGULATOR Touch and Dim HF-R T 236 220-240](http://www.lighting.philips.com/pwc_li/in_en/assets/docs/products/DALI%20Dimmable%20Ballast.pdf) | [OSRAM QUICKTRONIC - INTELLIGENT QTi DALI 2x28/54 DIM](https://www.osram.com/media/resource/hires/335428/data-sheet-for-product-families-osram-qti-dali...dim.pdf) |
+| [Philips HF-REGULATOR Touch and Dim HF-R T 236 220-240](pictures/PHILIPS-HF-REGULATOR-TOUCH-a-DALI 18-58w-T8- 1-a-2-LAMPS.pdf) | [OSRAM QUICKTRONIC - INTELLIGENT QTi DALI 2x28/54 DIM](pictures/data-sheet-for-product-families-osram-qti-dali-dim.pdf) |
 | ---- | ---- |
-| [![Ballast Philips](pictures/ballast-philips-type.jpg)](http://www.lighting.philips.com/pwc_li/in_en/assets/docs/products/DALI%20Dimmable%20Ballast.pdf) | [![Ballast Osram](pictures/ballast-osram-type.jpg)](https://www.osram.com/media/resource/hires/335428/data-sheet-for-product-families-osram-qti-dali...dim.pdf) |
+| [![Ballast Philips](pictures/ballast-philips-type.jpg)](pictures/PHILIPS-HF-REGULATOR-TOUCH-a-DALI 18-58w-T8- 1-a-2-LAMPS.pdf) | [![Ballast Osram](pictures/ballast-osram-type.jpg)](pictures/data-sheet-for-product-families-osram-qti-dali-dim.pdf) |
 
 
 ## Typical Application Example

@@ -1,0 +1,22 @@
+// DimSwitch Library Tester - use with DimSwitchTester-ESP.ino
+// Documentation - https://github.com/krzychb/DimSwitch
+//
+// place this file in "openhab/configuration/sitemaps" directory
+//
+
+sitemap default label="DimSwitch Tester"
+{
+	Frame label="Lamp control" 
+	{
+		Text item=LightIntensity
+		Setpoint item=TargetIntensity minValue=0 maxValue=100 step=10
+		Switch item=LightSwitch
+	}
+	Frame label="Light sensor ADC" 
+	{
+		Text item=LightSensor
+		Text item=MinIntensity
+		Text item=MaxIntensity
+		Switch item=Calibrate mappings=[ON="Run"]
+	}
+}
