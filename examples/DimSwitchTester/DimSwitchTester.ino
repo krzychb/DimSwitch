@@ -76,7 +76,7 @@ void loop(void)
         break;
       case 't':
         Serial.println("Toggle switch On");
-        lamp.toggleSwitch();
+        lamp.toggle();
         break;
       case '1':
         Serial.println("Power On");
