@@ -16,6 +16,7 @@ runSequence	KEYWORD2
 readIntensityCounts	KEYWORD2
 readIntensityPercent	KEYWORD2
 getState	KEYWORD2
+isIdle	KEYWORD2
 toggle	KEYWORD2
 power	KEYWORD2
 calibrate	KEYWORD2

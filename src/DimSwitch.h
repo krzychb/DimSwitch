@@ -3,7 +3,12 @@
 
 #include "Arduino.h"
 
+// number of samples of light intensity
 #define MEASURE_SAMPLES 5
+
+// minimum period in milliseconds
+// between subsequent calls of state machine sequence
+#define SEQUENCE_PERIOD 1
 
 // time periods to operate control relay
 // values are in milliseconds
@@ -70,6 +75,7 @@ class DimSwitch
     int readIntensityCounts(void);
     int readIntensityPercent(void);
     bool getState(void);
+    bool isIdle(void);
     void toggle(void);
     void power(bool state);
     void calibrate(void);
@@ -79,6 +85,7 @@ class DimSwitch
   private:
     int _intensityMeasurePin;
     int _switchPin;
+    long _lastCalled = 0;
     long _stateTimer;
     long _sequenceTimer;
     long _intensityChangeTimer;

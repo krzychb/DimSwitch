@@ -35,6 +35,15 @@ void DimSwitch::runSequence(void)
 	  return;
   }
 
+  // ====================
+  // Exit if too soon
+  // ====================
+  if (millis() < _lastCalled + SEQUENCE_PERIOD)
+  {
+	  return;
+  }
+
+  _lastCalled = millis();
   _currentIntensity = readIntensityCounts();
 
   // ====================
@@ -243,10 +252,9 @@ void DimSwitch::runSequence(void)
     }
     else
     {
-      int currentIntensity = _currentIntensity;
       digitalWrite(_switchPin, HIGH);
       _stateTimer = millis();
-      if (currentIntensity > minIntensity/2)
+      if (_currentIntensity > minIntensity/2)
       {
         stateName = SET_INTENSITY__ACCELERATE;
       }
@@ -256,7 +264,7 @@ void DimSwitch::runSequence(void)
         Serial.print("Get On > ");
       }
       Serial.print("Moving from ");
-      Serial.print(currentIntensity);
+      Serial.print(_currentIntensity);
       Serial.print(" to ");
       Serial.print(_targetIntensity);
       Serial.print(" > ");
@@ -274,14 +282,13 @@ void DimSwitch::runSequence(void)
   {
     if (millis() > _stateTimer + ACCELERATE_DURATION)
     {
-      int currentIntensity = _currentIntensity;
-      boolean goingUp = (_intensityChange > 0) ? true : false;
-      _targetAbove = (currentIntensity < _targetIntensity) ? true : false;
+      bool goingUp = (_intensityChange > 0) ? true : false;
+      _targetAbove = (_currentIntensity < _targetIntensity) ? true : false;
       Serial.println();
       Serial.print("\tMoved by ");
       Serial.print(_intensityChange);
       Serial.print(" to ");
-      Serial.print(currentIntensity);
+      Serial.print(_currentIntensity);
       Serial.print(", ");
       if (_targetAbove && goingUp || !_targetAbove && !goingUp)
       {
@@ -394,14 +401,18 @@ int DimSwitch::readIntensityPercent(void)
 //
 bool DimSwitch::getState(void)
 {
-    if (readIntensityCounts() > minIntensity/2)
-    {
-    	return HIGH;
-    }
-    else
-    {
-    	return LOW;
-    }
+  return (readIntensityCounts() > minIntensity/2) ? HIGH : LOW;
+}
+
+
+//
+// Check if sequence is idle
+//
+// HIGH - sequence is idle, LOW - sequence is running
+//
+bool DimSwitch::isIdle(void)
+{
+  return (stateName == SEQUENCE_IDLE) ? HIGH : LOW;
 }
 
 
@@ -421,14 +432,7 @@ void DimSwitch::toggle(void)
 //
 void DimSwitch::power(bool state)
 {
-  if (state == HIGH)
-  {
-    stateName = POWER_ON;
-  }
-  else
-  {
-    stateName = POWER_OFF;
-  }
+  stateName = (state == HIGH) ? POWER_ON : POWER_OFF;
 }
 
 
