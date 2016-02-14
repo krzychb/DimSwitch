@@ -1,0 +1,22 @@
+// DimSwitch Library Tester - use with DimSwitchTester-ESP-MQTT.ino
+// Documentation - https://github.com/krzychb/DimSwitch
+//
+// place this file in "openhab/configuration/itmes" directory
+//
+// HTTP binding
+Number HTTP_LightIntensity	"Light intensity [%.0f%%]"	<slider>	{http="<[http://192.168.1.110/dimswitch:20000:REGEX(.*Light Intensity: (.*?)%<br/>.*)]"}
+Number HTTP_TargetIntensity	"Set intensity [%.0f%%]"	<slider>	{http=">[*:GET:http://192.168.1.110/dimswitch?TargetIntensity=%2$s] <[http://192.168.1.110/dimswitch:20000:REGEX(.*value=\"(.*?)\"><input.*)]"}
+Switch HTTP_LightSwitch		"Lamp switch"							{http=">[*:GET:http://192.168.1.110/dimswitch?Switch=%2$s] <[http://192.168.1.110/dimswitch:20000:REGEX(.*Light is: (.*?), switch it.*)]"}
+Number HTTP_LightSensor		"Now [%.0f]"				<settings>	{http="<[http://192.168.1.110/dimswitch:20000:REGEX(.*Now: (.*?)<br/>Min:.*)]"}
+Number HTTP_MinIntensity	"Min [%.0f]"				<settings>	{http="<[http://192.168.1.110/dimswitch:20000:REGEX(.*Min: (.*?)<br/>Max:.*)]"}
+Number HTTP_MaxIntensity	"Max [%.0f]"				<settings>	{http="<[http://192.168.1.110/dimswitch:20000:REGEX(.*Max: (.*?)<br/><a href.*)]"}
+Switch HTTP_Calibrate		"Calibrate"					<settings>	{http=">[*:GET:http://192.168.1.110/dimswitch?Calibrate=%2$s]"}
+
+// MQTT binding
+Number MQTT_LightIntensity	"Light intensity [%d%%]"	<slider>	{mqtt="<[test:sensor/LightIntensity:state:default]"}
+Number MQTT_TargetIntensity	"Set intensity [%d%%]"		<slider>	{mqtt=">[test:control/LightIntensity:command:*:default], <[test:sensor/LightIntensity:state:default]"}
+Switch MQTT_LightSwitch		"Lamp switch"							{mqtt=">[test:control/LightSwitch:command:*:default], <[test:sensor/LightSwitch:state:default]"}
+Number MQTT_LightSensor		"Now [%d]"					<settings>	{mqtt="<[test:sensor/LightSensor:state:default]"}
+Number MQTT_MinIntensity	"Min [%d]"					<settings>	{mqtt="<[test:sensor/MinIntensity:state:default]"}
+Number MQTT_MaxIntensity	"Max [%d]"					<settings>	{mqtt="<[test:sensor/MaxIntensity:state:default]"}
+Switch MQTT_Calibrate		"Calibrate"					<settings>	{mqtt=">[test:control/Calibrate:command:*:default]"}

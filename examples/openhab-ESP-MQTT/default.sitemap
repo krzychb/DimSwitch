@@ -1,0 +1,43 @@
+// DimSwitch Library Tester - use with DimSwitchTester-ESP-MQTT.ino
+// Documentation - https://github.com/krzychb/DimSwitch
+//
+// place this file in "openhab/configuration/sitemaps" directory
+//
+sitemap default label="DimSwitch Library Tester"
+{
+	Frame label="Test by binding type" 
+	{
+		Text label="HTTP binding" icon="settings"
+		{
+			Frame label="Lamp control" 
+			{
+				Text item=HTTP_LightIntensity
+				Slider item=HTTP_TargetIntensity
+				Switch item=HTTP_LightSwitch
+			}
+			Frame label="Light sensor ADC" 
+			{
+				Text item=HTTP_LightSensor
+				Text item=HTTP_MinIntensity
+				Text item=HTTP_MaxIntensity
+				Switch item=HTTP_Calibrate mappings=[ON="Run"]
+			}
+		}
+		Text label="MQTT binding" icon="settings"
+		{
+			Frame label="Lamp control" 
+			{
+				Text item=MQTT_LightIntensity
+				Slider item=MQTT_TargetIntensity
+				Switch item=MQTT_LightSwitch
+			}
+			Frame label="Light sensor ADC" 
+			{
+				Text item=MQTT_LightSensor
+				Text item=MQTT_MinIntensity
+				Text item=MQTT_MaxIntensity
+				Switch item=MQTT_Calibrate mappings=[ON="Run"]
+			}
+		}
+	}
+}
