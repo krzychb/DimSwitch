@@ -10,10 +10,6 @@ It works with ESP8266, Arduino UNO, Micro, MEGA, DUE and other compatible Arduin
 | --- | --- |
 | ![Hazardous Voltage Warning](pictures/hazardous-voltage-warning-label.png) |  Building and testing hardware for this project involves working with mains power that is dangerous to your life. Do not connect this project to the mains power without proper training and certification! Please read [Safety Guidelines for High Voltage and/or Line Powered Equipment](http://www.repairfaq.org/REPAIR/F_safety.html) |
 
-**Warning:** Building and testing a hardware project with this library involves working with mains power that is dangerous to your life. 
-
-Do not connect this project to the mains power without proper training and certification! Please read [Safety Guidelines for High Voltage and/or Line Powered Equipment](http://www.repairfaq.org/REPAIR/F_safety.html)
-
 
 ## Functions
 
