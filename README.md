@@ -40,6 +40,21 @@ This library is a spin-off of project [esp-lamp-in-sw](https://github.com/krzych
 ![DimSwitch Application Example](extras/pictures/application-example.png)
 
 
+## Sample Control Screens
+
+This library features example sketches and openHAB code to show options to control the lamp using:
+  1. Arduino IDE Serial Monitor
+  2. Web browser with simple HTML code
+  3. OpenHAB with MQTT binding
+  4. OpenHAB with HTTP binding
+
+The last three option are presented on screen shoots below.
+
+| ![Web browser with simple HTML code](extras/pictures/dimswitch-tester-browser.png) | ![openHAB with MQTT binding](extras/pictures/openhab-mqtt-binding-android.png) | ![openHAB with HTTP binding](extras/pictures/openhab-http-binding-iphone.png) |
+| --- | --- | --- |
+| Web browser with simple HTML code | openHAB with MQTT binding | openHAB with HTTP binding |
+
+
 ## Contribute
 
 Feel free to contribute to the project in any way you like! 
