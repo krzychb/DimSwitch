@@ -87,6 +87,7 @@ void setupOTA(void);
 #define LAMP_STATE_COMMAND "control/LightSwitch"
 #define SENSOR_CALIBRATE "control/Calibrate"
 //
+// Use MQTT library by @Imroy - https://github.com/Imroy/pubsubclient
 #include <PubSubClient.h>
 WiFiClient mqttClient;
 PubSubClient MQTTclient(mqttClient, "test.mosquitto.org");
