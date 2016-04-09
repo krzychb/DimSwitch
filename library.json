@@ -1,0 +1,17 @@
+{
+    "name": "DimSwitch",
+    "keywords": "tube, ballast, switch",
+    "description": "A library to control dimmable ballasts for fluorescent light tubes.",
+    "repository":
+    {
+        "type": "git",
+        "url": "https://github.com/krzychb/DimSwitch.git"
+    },
+    "exclude": "extras",
+    "frameworks": "arduino",
+    "platforms": [
+        "atmelavr",
+        "espressif",
+        "atmelsam"
+    ]
+}
