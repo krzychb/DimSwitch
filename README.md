@@ -15,7 +15,7 @@ This library is a spin-off of project [esp-lamp-in-sw](https://github.com/krzych
 
 ## Tested with
 
-* [Philips HF-REGULATOR Touch and Dim HF-R T 236 220-240](extras/pictures/PHILIPS-HF-REGULATOR-TOUCH-a-DALI 18-58w-T8- 1-a-2-LAMPS.pdf)
+* [Philips HF-REGULATOR Touch and Dim HF-R T 236 220-240](extras/pictures/PHILIPS-HF-REGULATOR-TOUCH-a-DALI-18-58w-T8-1-a-2-LAMPS.pdf)
 * [OSRAM QUICKTRONIC - INTELLIGENT QTi DALI 2x28/54 DIM](extras/pictures/data-sheet-for-product-families-osram-qti-dali-dim.pdf)
 
 

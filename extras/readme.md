@@ -31,9 +31,9 @@ It works with ESP8266, Arduino UNO, Micro, MEGA, DUE and other compatible Arduin
 
 Operation of this library has been verified with the following ballasts:
 
-| [Philips HF-REGULATOR Touch and Dim HF-R T 236 220-240](pictures/PHILIPS-HF-REGULATOR-TOUCH-a-DALI 18-58w-T8- 1-a-2-LAMPS.pdf) | [OSRAM QUICKTRONIC - INTELLIGENT QTi DALI 2x28/54 DIM](pictures/data-sheet-for-product-families-osram-qti-dali-dim.pdf) |
+| [Philips HF-REGULATOR Touch and Dim HF-R T 236 220-240](pictures/PHILIPS-HF-REGULATOR-TOUCH-a-DALI-18-58w-T8-1-a-2-LAMPS.pdf) | [OSRAM QUICKTRONIC - INTELLIGENT QTi DALI 2x28/54 DIM](pictures/data-sheet-for-product-families-osram-qti-dali-dim.pdf) |
 | ---- | ---- |
-| [![Ballast Philips](pictures/ballast-philips-type.jpg)](pictures/PHILIPS-HF-REGULATOR-TOUCH-a-DALI 18-58w-T8- 1-a-2-LAMPS.pdf) | [![Ballast Osram](pictures/ballast-osram-type.jpg)](pictures/data-sheet-for-product-families-osram-qti-dali-dim.pdf) |
+| [![Ballast Philips](pictures/ballast-philips-type.jpg)](pictures/PHILIPS-HF-REGULATOR-TOUCH-a-DALI-18-58w-T8-1-a-2-LAMPS.pdf) | [![Ballast Osram](pictures/ballast-osram-type.jpg)](pictures/data-sheet-for-product-families-osram-qti-dali-dim.pdf) |
 
 
 ## Typical Application Example
